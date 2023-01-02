@@ -13,6 +13,8 @@ services:
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: server
       PHPLDAPADMIN_HTTPS: 'false'
+    volumes:
+      - admin:/var/www/phpldapadmin
     ports:
       - "8100:80"
     networks:
