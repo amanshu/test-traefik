@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+
+  traefik:
+    image: "traefik:v2.9"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=external"
+      - "--entrypoints.web.address=:80"
+      - "--accesslogs=true"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - external
+
+  temp:
+    image: "hello-world"
+    networks:
+      - internal
+
+networks:
+  internal:
+    name: internal
+  external:
+    name: external

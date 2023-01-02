@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  # admin container to allow frontend access to the ldap system, pulled from docker-hub
+  admin:
+    image: osixia/phpldapadmin:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.openldap.rule=Path(`/openldap`)||PathPrefix(`/openldap/`)"
+      - "traefik.http.routers.openldap.entrypoints=web"
+      - "traefik.docker.network=external"
+    networks:
+      - external
+    ports:
+      - '8100:80'
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: server
+      PHPLDAPADMIN_HTTPS: 'false'
+    volumes:
+      - admin:/var/www/phpldapadmin
+
+volumes:
+  admin:
+
+networks:
+  external:
+    external: true
