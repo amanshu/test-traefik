@@ -8,8 +8,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.openldap.rule=Path(`/openldap`)||PathPrefix(`/openldap/`)"
       - "traefik.http.routers.openldap.entrypoints=web"
-      - "traefik.docker.network=external"
-      - "traefik.http.services.openldap-admin.loadbalancer.server.port=8100"
+      - "traefik.http.services.openldap-admin.loadbalancer.server.port=80"
+      - "traefik.http.services.openldap-admin.loadbalancer.server.scheme=http"
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: server
       PHPLDAPADMIN_HTTPS: 'false'
@@ -18,11 +18,11 @@ services:
     ports:
       - "8100:80"
     networks:
-      - internal
       - external
 
+volumes:
+  admin:
+
 networks:
-  internal:
-    external: true
   external:
     external: true

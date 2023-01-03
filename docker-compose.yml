@@ -12,7 +12,7 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=external"
       - "--entrypoints.web.address=:80"
-      - "--accesslogs=true"
+      - "--accesslog=true"
     ports:
       - "80:80"
       - "8080:8080"
@@ -21,13 +21,6 @@ services:
     networks:
       - external
 
-  temp:
-    image: "hello-world"
-    networks:
-      - internal
-
 networks:
-  internal:
-    name: internal
   external:
     name: external
