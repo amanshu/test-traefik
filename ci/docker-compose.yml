@@ -1,0 +1,39 @@
+version: '3.7'
+
+volumes:
+  jenkins-home:
+  
+services:
+  controller:
+    build:
+      context: .
+      args:
+        Version: 1.0
+    environment:
+      - JENKINS_OPTS="--prefix=/jenkins"
+    networks:
+      - external
+      - net
+    ports:
+      - '8300:8080'
+      - '50000:50000'
+    volumes:
+      - 'data:/var/jenkins_home'
+      - 'config:/jenkins_setup'
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.openldap.rule=Path(`/jenkins`)||PathPrefix(`/jenkins/`)"
+#      - "traefik.http.routers.openldap.entrypoints=web"
+      - "traefik.http.services.openldap-admin.loadbalancer.server.port=8080"
+#      - "traefik.http.services.openldap-admin.loadbalancer.server.scheme=http"
+
+volumes:
+  data:
+  config:
+
+networks:
+  net:
+  external:
+    external: true
+    name: external
